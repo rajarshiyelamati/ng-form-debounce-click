@@ -1,24 +1,87 @@
 # NgFormDebounceClick
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.2.
+* A simple `directive` with no extenal dependencies.
+* Library location: `projects/form-debounce-click` directory of this repository.
+* works for Angular 8 and above in all devices.
 
-## Code scaffolding
+## Examples/Demo
 
-Run `ng generate component component-name --project ng-form-debounce-click` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ng-form-debounce-click`.
-> Note: Don't forget to add `--project ng-form-debounce-click` or else it will be added to the default project in your `angular.json` file. 
+* A simple Example can be found under `src/app` directory of this repository.
 
-## Build
 
-Run `ng build ng-form-debounce-click` to build the project. The build artifacts will be stored in the `dist/` directory.
+### @Inputs()
 
-## Publishing
+| Input            | Type       | Required                   |  Description|
+| --------------------- | -------    | -------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| validateForm          | FormGroup | optional                  | if validateForm is invalid the click event will be blocked                                           |
+| markFormAsTouched     | boolean   | Optional, default: true   | if markFormAsTouched is true, All the controls in validateForm will be marked as touched on click.                                     |
+| debounceTime          | number    | Optional, default: 300    |  only one click will be emitted even mutliple click events happened in the given debounceTime                                     |
 
-After building your library with `ng build ng-form-debounce-click`, go to the dist folder `cd dist/ng-form-debounce-click` and run `npm publish`.
+### @Outputs()
 
-## Running unit tests
+| Output                  | Type       | Required | Description                                            |
+| ----------------------- | ---------- | -------- | ------------------------------------------------------ |
+| ngFormDebounceSubmit    | void&gt; | **YES**  | emits a debounce click event after checking the validateForm validity if exists |
+| ngFormInvalid           | void&gt; | **YES**  | emits a event on click if the validateForm is invalid |
 
-Run `ng test ng-form-debounce-click` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Usage
 
-## Further help
+1) Register the `NgFormDebounceClickModule` in your app module.
+ &gt; `import { NgFormDebounceClickModule } from 'ng-form-debounce-click'`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+ ```typescript
+import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgFormDebounceClickModule } from 'projects/ng-form-debounce-click';
+
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgFormDebounceClickModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+ ```
+
+ 2) Use the directive `(NgFormDebounceClickDirective)` in your component.
+
+```typescript
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-root',
+  template: `
+  <div class="container">
+  <div class="form" [formGroup]="formGroup">
+    <label for="name"><b>Name</b></label>
+    <input type="text" formControlName="Name">
+    <p class="error" *ngIf="formGroup.controls.Name?.errors?.required && formGroup.controls.Name?.touched">Name is required</p>
+  
+    <label for="ssn"><b>SSN</b></label>
+    <input type="text"  formControlName="SSN">
+    <p class="error" *ngIf="formGroup.controls.SSN?.errors?.required && formGroup.controls.SSN?.touched">SSN is required</p>
+      
+    <button ngFormDebounceClick [validateForm]="formGroup" (ngFormDebounceSubmit)="submit()">Submit</button>
+  </div>
+</div>
+`,
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+
+}
+```
+
+## Running the example in local env
+
+* `npm i`
+* Run `ng serve` for a dev server and running the demo app. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
