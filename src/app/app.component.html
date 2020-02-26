@@ -1,0 +1,15 @@
+<div class="container">
+  <h3 style="text-align: center"> NgFormDebounceClickDirective Demo</h3>
+  <div class="form" [formGroup]="formGroup">
+    <label for="name"><b>Name</b></label>
+    <input type="text" formControlName="Name">
+    <p class="error" *ngIf="formGroup.controls.Name?.errors?.required && formGroup.controls.Name?.touched">Name is required</p>
+  
+    <label for="ssn"><b>SSN</b></label>
+    <input type="text"  formControlName="SSN">
+    <p class="error" *ngIf="formGroup.controls.SSN?.errors?.required && formGroup.controls.SSN?.touched">SSN is required</p>
+      
+    <button ngFormDebounceClick [validateForm]="formGroup" (ngFormDebounceSubmit)="submit()" (ngFormInvalid)="formInvalid()">Submit</button>
+    <div *ngIf="isFormInvalidError" class="error">Please provide valid details to submit the form</div>
+  </div>
+</div>

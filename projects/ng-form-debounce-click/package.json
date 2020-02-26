@@ -1,0 +1,11 @@
+{
+  "name": "ng-form-debounce-click",
+  "version": "1.0.0",
+  "author": "Rajarshi Yelamati",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^9.0.2",
+    "@angular/core": "^9.0.2",
+    "tslib": "^1.10.0"
+  }
+}
